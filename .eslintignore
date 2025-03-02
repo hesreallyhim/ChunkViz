@@ -1,0 +1,13 @@
+# Builds
+build/
+dist/
+
+# Dependencies
+node_modules/
+
+# Coverage reports
+coverage/
+
+# Misc
+.DS_Store
+*.pem

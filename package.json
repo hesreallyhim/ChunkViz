@@ -1,6 +1,7 @@
 {
   "name": "chunkviz",
   "version": "0.1.0",
+  "type": "module",
   "dependencies": {
     "@testing-library/user-event": "^13.5.0",
     "langchain": "^0.0.203",
@@ -19,15 +20,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint src --ext .js,.jsx",
-    "lint:fix": "eslint src --ext .js,.jsx --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepare": "husky"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -48,6 +43,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "globals": "^16.0.0",
     "husky": "^9.1.7",
     "jsdom": "^26.0.0",
     "lint-staged": "^15.4.3",
@@ -55,8 +51,8 @@
     "vitest": "^3.0.7"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix"
+    "*.{js,jsx,mjs,cjs}": [
+      "eslint --fix --config eslint.config.js"
     ]
   }
 }
