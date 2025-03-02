@@ -30,12 +30,21 @@ Navigate to the cloned repository's directory and install the necessary dependen
 
 `npm install`
 
+### Step 3: Development Mode
 
-### Step 3: Build the Application
+To run the application in development mode with hot reloading:
+
+`npm run dev`
+
+### Step 4: Build for Production
+
+To build the application for production:
 
 `npm run build`
 
-### Step 4: Run locally
+### Step 5: Run Production Build Locally
+
+To run the production build locally:
 
 `npm start`
 
@@ -44,4 +53,4 @@ Made with ❤️ by [Greg Kamradt](https://twitter.com/GregKamradt)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details. Use of this software requires attribution to the original author and project, as detailed in the license.ChC
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details. Use of this software requires attribution to the original author and project, as detailed in the license.
