@@ -10,9 +10,17 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       'src': path.resolve(__dirname, './src')
     },
+    extensions: ['.js', '.jsx'],
   },
   // Output to the same 'build' directory that CRA used
   build: {
     outDir: 'build',
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
   }
 });
