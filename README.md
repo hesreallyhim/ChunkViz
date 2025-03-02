@@ -16,6 +16,7 @@ Follow these steps to download and run the application on your local machine.
 ### Prerequisites
 
 Before you begin, ensure you have [Node.js](https://nodejs.org/) installed on your system.
+(Be sure to check your version of `node` as well (`node --version`) against the current status of [node versions](https://endoflife.date/nodejs))
 
 ### Step 1: Clone the Repository
 
@@ -31,13 +32,21 @@ Navigate to the cloned repository's directory and install the necessary dependen
 `npm install`
 
 
-### Step 3: Build the Application
+### Step 3 (For local development/experimentation): Run the local development server
+
+`npm run dev` (this will serve the app with `react-scripts`)
+
+### Step 4 (For testing your production build): Build the Application
 
 `npm run build`
 
-### Step 4: Run locally
+### Step 5: Run the build locally
 
-`npm start`
+`npm start` (**NOTE**: This does _not_ invoke `react-scripts start`. Some users have reported issues running this command on Windows.)
+
+
+
+
 
 
 Made with ❤️ by [Greg Kamradt](https://twitter.com/GregKamradt)
