@@ -19,9 +19,16 @@ class CharacterTextSplitter_ext extends CharacterTextSplitter {
   }
 }
 
+const colorblindFriendlyColors = [
+  '#D43D1A', // Vivid Orange
+  '#008F5D', // Bright Green
+  '#E6007A', // Hot Pink
+  '#E4B400', // Golden Yellow
+  '#005FAD', // Deep Blue
+];
+
 const highlightChunks = (chunks) => {
   let highlightedText = '';
-  const colors = ['#70d6ff', '#e9ff70', '#ff9770', '#ffd670', '#ff70a6'];
 
   chunks.forEach((chunk, index) => {
     let uniquePart, overlapPart;
@@ -45,9 +52,9 @@ const highlightChunks = (chunks) => {
     }
 
     // Generate a pseudo-random color for each unique part using HSL
-    const color = colors[index % colors.length];
+    const color = colorblindFriendlyColors[index % colorblindFriendlyColors.length];
 
-    const highlightedChunk = `<span style="background: ${color}">${uniquePart}</span>`;
+    const highlightedChunk = `<span style="background: ${color}; color: white>${uniquePart}</span>`;
     highlightedText += highlightedChunk;
 
     // Add overlap part only if it's not the last chunk
