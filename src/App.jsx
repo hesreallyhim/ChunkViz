@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { defaultProse, defaultJS, defaultPython, defaultMarkdown } from './defaultText';
-import { CharacterTextSplitter, RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { CharacterTextSplitter, RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
 class RecursiveCharacterTextSplitter_ext extends RecursiveCharacterTextSplitter {
   joinDocs(docs, separator) {
@@ -30,9 +30,16 @@ const highlightChunks = (chunks) => {
       uniquePart = chunk.text.slice(0, chunk.text.length - chunk.overlapWithNext);
       overlapPart = chunk.text.slice(chunk.text.length - chunk.overlapWithNext);
     } else if (index !== chunks.length - 1) {
-      uniquePart = chunk.text.slice(chunk.overlapWithNext, chunk.text.length - chunk.overlapWithNext);
-      overlapPart = chunk.text.slice(chunk.text.length - chunk.overlapWithNext, chunk.text.overlapWithNext);
-    } else { // It's the last chunk
+      uniquePart = chunk.text.slice(
+        chunk.overlapWithNext,
+        chunk.text.length - chunk.overlapWithNext
+      );
+      overlapPart = chunk.text.slice(
+        chunk.text.length - chunk.overlapWithNext,
+        chunk.text.overlapWithNext
+      );
+    } else {
+      // It's the last chunk
       uniquePart = chunk.text.slice(chunk.overlapWithNext);
       overlapPart = ''; // There's no overlap with the next chunk
     }
@@ -51,6 +58,40 @@ const highlightChunks = (chunks) => {
   return highlightedText;
 };
 
+// Moved splitterOptions outside of the App component
+const splitterOptions = {
+  characterSplitter: {
+    label: 'Character Splitter 🦜️🔗',
+    language: null,
+    chunk_overlap_ind: true,
+    defaultText: defaultProse,
+  },
+  recursiveCharacterTextSplitter: {
+    label: 'Recursive Character Text Splitter 🦜️🔗',
+    language: null,
+    chunk_overlap_ind: false,
+    defaultText: defaultProse,
+  },
+  recursiveCharacterTextSplitterJS: {
+    label: 'Recursive Character Text Splitter - JS 🦜️🔗',
+    language: 'js',
+    chunk_overlap_ind: false,
+    defaultText: defaultJS,
+  },
+  recursiveCharacterTextSplitterPython: {
+    label: 'Recursive Character Text Splitter - Python 🦜️🔗',
+    language: 'python',
+    chunk_overlap_ind: false,
+    defaultText: defaultPython,
+  },
+  recursiveCharacterTextSplitterMarkdown: {
+    label: 'Recursive Character Text Splitter - Markdown 🦜️🔗',
+    language: 'markdown',
+    chunk_overlap_ind: false,
+    defaultText: defaultMarkdown,
+  },
+};
+
 function App() {
   const [text, setText] = useState(defaultProse);
   const [chunkSize, setChunkSize] = useState(25);
@@ -60,40 +101,7 @@ function App() {
   const [rawChunks, setRawChunks] = useState([]);
   const [overlapSize, setOverlapSize] = useState([]);
 
-  const MAX_TEXT_LENGTH = 100000; // Define your maximum text length
-
-  const splitterOptions = useMemo(() => ({
-    'characterSplitter': {
-      label: 'Character Splitter 🦜️🔗',
-      language: null,
-      chunk_overlap_ind: true,
-      defaultText: defaultProse
-    },
-    'recursiveCharacterTextSplitter': {
-      label: 'Recursive Character Text Splitter 🦜️🔗',
-      language: null,
-      chunk_overlap_ind: false,
-      defaultText: defaultProse
-    },
-    'recursiveCharacterTextSplitterJS': {
-      label: 'Recursive Character Text Splitter - JS 🦜️🔗',
-      language: 'js',
-      chunk_overlap_ind: false,
-      defaultText: defaultJS
-    },
-    'recursiveCharacterTextSplitterPython': {
-      label: 'Recursive Character Text Splitter - Python 🦜️🔗',
-      language: 'python',
-      chunk_overlap_ind: false,
-      defaultText: defaultPython
-    },
-    'recursiveCharacterTextSplitterMarkdown': {
-      label: 'Recursive Character Text Splitter - Markdown 🦜️🔗',
-      language: 'markdown',
-      chunk_overlap_ind: false,
-      defaultText: defaultMarkdown
-    },
-  }), []);
+  const MAX_TEXT_LENGTH = 100_000; // Define your maximum text length
 
   useEffect(() => {
     if (!splitterOptions[splitter].chunk_overlap_ind) {
@@ -101,18 +109,20 @@ function App() {
     }
 
     // Get all default texts
-    const defaultTexts = Object.values(splitterOptions).map(option => option.defaultText) || [];
+    const defaultTexts = Object.values(splitterOptions).map((option) => option.defaultText) || [];
 
     // Check if the current text is blank or a default text
     if (defaultTexts.includes(text)) {
       setText(splitterOptions[splitter].defaultText); // Set the default text for the selected splitter
     }
-  }, [splitter, text, splitterOptions]);
+  }, [splitter, text]);
 
   const handleTextChange = (event) => {
     let newText = event.target.value;
     if (newText.length > MAX_TEXT_LENGTH) {
-      alert(`Error: Text cannot be longer than ${MAX_TEXT_LENGTH} characters. It will be trimmed to fit the limit.`);
+      alert(
+        `Error: Text cannot be longer than ${MAX_TEXT_LENGTH} characters. It will be trimmed to fit the limit.`
+      );
       newText = newText.substring(0, MAX_TEXT_LENGTH);
     }
     setText(newText);
@@ -122,7 +132,7 @@ function App() {
     let newChunkSize = Number(event.target.value);
     if (newChunkSize > overlap * 2) {
       setChunkSize(newChunkSize);
-      setOverlapSize(newChunkSize * .45)
+      setOverlapSize(newChunkSize * 0.45);
     }
   };
 
@@ -137,7 +147,7 @@ function App() {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         setText(e.target.result);
       };
       reader.readAsText(file);
@@ -160,7 +170,7 @@ function App() {
         startIndex: startIndex,
         endIndex: endIndex,
         text: chunk,
-        overlapWithNext: chunkOverlap
+        overlapWithNext: chunkOverlap,
       });
 
       currentStartIndex = endIndex - (isLastChunk ? 0 : chunkOverlap); // Adjusted current start index
@@ -173,15 +183,15 @@ function App() {
       return [];
     }
     const splitter = new CharacterTextSplitter_ext({
-      separator: "",
+      separator: '',
       chunkSize: chunkSize,
       chunkOverlap: overlap,
-      keepSeparator: true
+      keepSeparator: true,
     });
 
     const documents = await splitter.createDocuments([text]);
 
-    let chunks = []
+    let chunks = [];
     for (let document of documents) {
       chunks.push(document.pageContent);
     }
@@ -197,19 +207,19 @@ function App() {
       splitter = RecursiveCharacterTextSplitter_ext.fromLanguage(language, {
         chunkSize: chunkSize,
         chunkOverlap: overlap,
-        keepSeparator: true
+        keepSeparator: true,
       });
     } else {
       splitter = new RecursiveCharacterTextSplitter_ext({
         chunkSize: chunkSize,
         chunkOverlap: overlap,
-        keepSeparator: true
+        keepSeparator: true,
       });
     }
 
     const documents = await splitter.createDocuments([text]);
 
-    let chunks = []
+    let chunks = [];
     for (let document of documents) {
       chunks.push(document.pageContent);
     }
@@ -228,7 +238,7 @@ function App() {
     const reconstructedChunks = reconstructChunks(rawChunks, overlap);
     const highlightedText = highlightChunks(reconstructedChunks);
     return highlightedText;
-  }, [text, chunkSize, overlap, splitter, splitterOptions]);
+  }, [text, chunkSize, overlap, splitter]);
 
   useEffect(() => {
     (async () => {
@@ -240,19 +250,49 @@ function App() {
   return (
     <div className="App">
       <h1>ChunkViz v0.1</h1>
-      <p>Want to learn more about AI Engineering Patterns? Join me on <a href="https://x.com/GregKamradt" target="_blank" rel="noopener noreferrer">Twitter</a> or <a href="https://mail.gregkamradt.com/signup" target="_blank" rel="noopener noreferrer">Newsletter</a>.</p>
-      <hr style={{width: '50%', margin: 'auto'}} />
+      <p>
+        Want to learn more about AI Engineering Patterns? Join me on{' '}
+        <a href="https://x.com/GregKamradt" target="_blank" rel="noopener noreferrer">
+          Twitter
+        </a>{' '}
+        or{' '}
+        <a href="https://mail.gregkamradt.com/signup" target="_blank" rel="noopener noreferrer">
+          Newsletter
+        </a>
+        .
+      </p>
+      <hr style={{ width: '50%', margin: 'auto' }} />
       <p>Language Models do better when they're focused.</p>
-      <p>One strategy is to pass a relevant subset (chunk) of your full data. There are many ways to chunk text.</p>
+      <p>
+        One strategy is to pass a relevant subset (chunk) of your full data. There are many ways to
+        chunk text.
+      </p>
       <p>This is an tool to understand different chunking/splitting strategies.</p>
-      <p><a href='#explanation'>Explain like I'm 5...</a></p>
-      <div className='textArea'>
+      <p>
+        <a href="#explanation">Explain like I'm 5...</a>
+      </p>
+      <div className="textArea">
         <textarea value={text} onChange={handleTextChange} rows={10} cols={50} />
-        <div className='uploadButtonArea'>
+        <div className="uploadButtonArea">
           <label htmlFor="file-upload" className="custom-file-upload">
-            <span style={{borderRadius: '5px', padding: '5px', fontSize: '12px', backgroundColor: '#d1dcff'}}>Upload .txt</span>
+            <span
+              style={{
+                borderRadius: '5px',
+                padding: '5px',
+                fontSize: '12px',
+                backgroundColor: '#d1dcff',
+              }}
+            >
+              Upload .txt
+            </span>
           </label>
-          <input id="file-upload" type="file" accept=".txt" onChange={handleFileUpload} style={{ display: 'none' }} />
+          <input
+            id="file-upload"
+            type="file"
+            accept=".txt"
+            onChange={handleFileUpload}
+            style={{ display: 'none' }}
+          />
         </div>
       </div>
       <div>
@@ -261,7 +301,9 @@ function App() {
             Splitter:
             <select value={splitter} onChange={(e) => setSplitter(e.target.value)}>
               {Object.entries(splitterOptions).map(([value, { label }]) => (
-                <option key={value} value={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </label>
@@ -277,7 +319,13 @@ function App() {
               style={{ width: '50px' }}
               onChange={handleChunkSizeChange}
             />
-            <input type="range" min="1" max="2000" value={chunkSize} onChange={handleChunkSizeChange} />
+            <input
+              type="range"
+              min="1"
+              max="2000"
+              value={chunkSize}
+              onChange={handleChunkSizeChange}
+            />
           </label>
         </div>
         <div className="slider-container">
@@ -302,34 +350,108 @@ function App() {
             />
           </label>
         </div>
+        <div>Total Characters: {rawChunks.reduce((a, b) => a + b.length, 0)}</div>
+        <div>Number of chunks: {rawChunks.length}</div>
         <div>
-          Total Characters: {rawChunks.reduce((a, b) => a + b.length, 0)}
-        </div>
-        <div>
-          Number of chunks: {rawChunks.length}
-        </div>
-        <div>
-          Average chunk size: {(rawChunks.reduce((a, b) => a + b.length, 0) / rawChunks.length).toFixed(1)}
+          Average chunk size:{' '}
+          {(rawChunks.reduce((a, b) => a + b.length, 0) / rawChunks.length).toFixed(1)}
         </div>
       </div>
       <div className="chunked-text">
         <div dangerouslySetInnerHTML={{ __html: highlightedText }} />
       </div>
       <hr style={{ width: '75%', marginTop: '15px' }} />
-      <div id='info_box'>
+      <div id="info_box">
         <h3 id="explanation">What's going on here?</h3>
-        <p>Language Models have context windows. This is the length of text that they can process in a single pass.<br /> Although context lengths are getting larger, it has been shown that language models increase performance on tasks when they are given less (but more relevant) information.</p>
-        <p>But which relevant subset of data do you pick? This is easy when a human is doing it by hand, but turns out it is difficult to instruct a computer to do this.</p>
-        <p>One common way to do this is by chunking, or subsetting, your large data into smaller pieces. In order to do this you need to pick a chunk strategy.</p>
-        <p>Pick different chunking strategies above to see how they impact the text, add your own text if you'd like.</p>
-        <p>You'll see different colors that represent different chunks. <span style={{ background: "#ff70a6" }}>This could be chunk 1. </span><span style={{ background: "#70d6ff" }}>This could be chunk 2, </span><span style={{ background: "#e9ff70" }}>sometimes a chunk will change i</span><span style={{ background: "#ffd670" }}>n the middle of a sentence (this isn't great). </span><span style={{ background: "#ff9770" }}>If any chunks have overlapping text, those will appear in orange.</span></p>
-        <p><b>Chunk Size</b>: The length (in characters) of your end chunks</p>
-        <p><b>Chunk Overlap (Green)</b>: The amount of overlap or cross over sequential chunks share</p>
-        <p><b>Notes:</b> *Text splitters trim the whitespace on the end of the js, python, and markdown splitters which is why the text jumps around, *Overlap is locked at &lt;50% of chunk size *Simple analytics (privacy friendly) used to understand my hosting bill.</p>
-        <p>For implementations of text splitters, view LangChain
-          (<a href="https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter" target="_blank" rel="noopener noreferrer">py</a>, <a href="https://js.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter" target="_blank" rel="noopener noreferrer">js</a>) & Llama Index (<a href="https://docs.llamaindex.ai/en/stable/api/llama_index.node_parser.SentenceSplitter.html#llama_index.node_parser.SentenceSplitter" target="_blank" rel="noopener noreferrer">py</a>, <a href="https://ts.llamaindex.ai/modules/low_level/node_parser" target="_blank" rel="noopener noreferrer">js</a>)</p>
-        <p>MIT License, <a href="https://github.com/gkamradt/ChunkViz" target="_blank" rel="noopener noreferrer">Opened Sourced</a>, PRs Welcome</p>
-        <p>Made with ❤️ by <a href="https://twitter.com/GregKamradt" target="_blank" rel="noopener noreferrer">Greg Kamradt</a></p>
+        <p>
+          Language Models have context windows. This is the length of text that they can process in
+          a single pass.
+          <br /> Although context lengths are getting larger, it has been shown that language models
+          increase performance on tasks when they are given less (but more relevant) information.
+        </p>
+        <p>
+          But which relevant subset of data do you pick? This is easy when a human is doing it by
+          hand, but turns out it is difficult to instruct a computer to do this.
+        </p>
+        <p>
+          One common way to do this is by chunking, or subsetting, your large data into smaller
+          pieces. In order to do this you need to pick a chunk strategy.
+        </p>
+        <p>
+          Pick different chunking strategies above to see how they impact the text, add your own
+          text if you'd like.
+        </p>
+        <p>
+          You'll see different colors that represent different chunks.{' '}
+          <span style={{ background: '#ff70a6' }}>This could be chunk 1. </span>
+          <span style={{ background: '#70d6ff' }}>This could be chunk 2, </span>
+          <span style={{ background: '#e9ff70' }}>sometimes a chunk will change i</span>
+          <span style={{ background: '#ffd670' }}>
+            n the middle of a sentence (this isn't great).{' '}
+          </span>
+          <span style={{ background: '#ff9770' }}>
+            If any chunks have overlapping text, those will appear in orange.
+          </span>
+        </p>
+        <p>
+          <b>Chunk Size</b>: The length (in characters) of your end chunks
+        </p>
+        <p>
+          <b>Chunk Overlap (Green)</b>: The amount of overlap or cross over sequential chunks share
+        </p>
+        <p>
+          <b>Notes:</b> *Text splitters trim the whitespace on the end of the js, python, and
+          markdown splitters which is why the text jumps around, *Overlap is locked at &lt;50% of
+          chunk size *Simple analytics (privacy friendly) used to understand my hosting bill.
+        </p>
+        <p>
+          For implementations of text splitters, view LangChain (
+          <a
+            href="https://python.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            py
+          </a>
+          ,{' '}
+          <a
+            href="https://js.langchain.com/docs/modules/data_connection/document_transformers/text_splitters/character_text_splitter"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            js
+          </a>
+          ) & Llama Index (
+          <a
+            href="https://docs.llamaindex.ai/en/stable/api/llama_index.node_parser.SentenceSplitter.html#llama_index.node_parser.SentenceSplitter"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            py
+          </a>
+          ,{' '}
+          <a
+            href="https://ts.llamaindex.ai/modules/low_level/node_parser"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            js
+          </a>
+          )
+        </p>
+        <p>
+          MIT License,{' '}
+          <a href="https://github.com/gkamradt/ChunkViz" target="_blank" rel="noopener noreferrer">
+            Opened Sourced
+          </a>
+          , PRs Welcome
+        </p>
+        <p>
+          Made with ❤️ by{' '}
+          <a href="https://twitter.com/GregKamradt" target="_blank" rel="noopener noreferrer">
+            Greg Kamradt
+          </a>
+        </p>
       </div>
     </div>
   );

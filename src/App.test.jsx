@@ -14,7 +14,7 @@ describe('App', () => {
   it('passes a simple test', () => {
     expect(true).toBe(true);
   });
-  
+
   it('renders without crashing', () => {
     expect(container.querySelector('.App')).not.toBeNull();
   });

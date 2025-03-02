@@ -4,7 +4,6 @@ This is a tool to visualize how different text splitters chunk up text
 
 ![ChunkViz Preview](public/ChunkVizPreview.png)
 
-
 [See the demo](https://chunkviz.up.railway.app/)
 
 [Explainer Video](https://twitter.com/GregKamradt/status/1733208049513611339)
@@ -47,7 +46,6 @@ To build the application for production:
 To run the production build locally:
 
 `npm start`
-
 
 Made with ❤️ by [Greg Kamradt](https://twitter.com/GregKamradt)
 

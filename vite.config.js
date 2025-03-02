@@ -8,7 +8,7 @@ export default defineConfig({
     alias: {
       // If you're using absolute imports from 'src'
       '@': path.resolve(__dirname, './src'),
-      'src': path.resolve(__dirname, './src')
+      src: path.resolve(__dirname, './src'),
     },
     extensions: ['.js', '.jsx'],
   },
@@ -22,5 +22,5 @@ export default defineConfig({
         '.js': 'jsx',
       },
     },
-  }
+  },
 });

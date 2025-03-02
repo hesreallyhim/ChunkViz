@@ -16,7 +16,7 @@ Y Combinator encourages founders to focus on growth rate rather than absolute nu
 
 YC doesn't explicitly tell founders that with growth rate "you get out what you put in," but it's not far from the truth. And if growth rate were proportional to performance, then the reward for performance p over time t would be proportional to pt.
 
-Even after decades of thinking about this, I find that sentence startling.`
+Even after decades of thinking about this, I find that sentence startling.`;
 
 const defaultJS = `import { Document } from "langchain/document";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
@@ -43,7 +43,7 @@ const docOutput = await splitter.splitDocuments([
   new Document({ pageContent: text }),
 ]);
 
-console.log(docOutput);`
+console.log(docOutput);`;
 
 const defaultPython = `from operator import itemgetter
 
@@ -73,7 +73,7 @@ chain = (
     | prompt
     | model
     | StrOutputParser()
-)`
+)`;
 
 const defaultMarkdown = `# Needle In A Haystack - Pressure Testing LLMs
 
@@ -91,6 +91,6 @@ git clone https://github.com/gkamradt/LLMTest_NeedleInAHaystack.git
 1. Place a random fact or statement (the 'needle') in the middle of a long context window (the 'haystack')
 2. Ask the model to retrieve this statement
 3. Iterate over various document depths (where the needle is placed) and context lengths to measure performance
-`
+`;
 
 export { defaultProse, defaultJS, defaultPython, defaultMarkdown };
