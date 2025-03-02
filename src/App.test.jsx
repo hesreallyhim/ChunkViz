@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import React from 'react';
 
 describe('App', () => {
   it('passes a simple test', () => {
@@ -8,7 +9,8 @@ describe('App', () => {
   });
   
   it('renders without crashing', () => {
-    render(<App />);
-    expect(document.querySelector('.App')).not.toBeNull();
+    const { container } = render(<App />);
+    screen.debug();
+    expect(container.querySelector('.App')).not.toBeNull();
   });
 });
