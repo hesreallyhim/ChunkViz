@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { defaultProse, defaultJS, defaultPython, defaultMarkdown } from './defaultText';
-import { CharacterTextSplitter, RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { CharacterTextSplitter, RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
 
 class RecursiveCharacterTextSplitter_ext extends RecursiveCharacterTextSplitter {
   joinDocs(docs, separator) {
