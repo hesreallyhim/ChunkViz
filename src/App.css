@@ -1,21 +1,32 @@
 .App {
   text-align: center;
   margin: 20px;
+  font-weight: 800;
+  font-size: 1.2em;
 }
 
 .chunked-text {
   white-space: pre-wrap; /* Keeps whitespace and newlines */
   font-family: monospace;
-  width: 50%;
+  width: 80%;
   margin: 0 auto;
   text-align: center;
-  padding-top: 30px;
+  padding-top: 20px;
   color: #ffffff;
+  line-height: 1.5;
+}
+
+.chunked-text span {
+  padding: 5px;
+  line-height: 1.8;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
 
 textarea {
   width: 100%;
   margin-bottom: 3px;
+  font-size: 1.2rem;
 }
 
 .textArea {
@@ -25,11 +36,11 @@ textarea {
 
 .uploadButtonArea {
   text-align: right;
-  /* background-color: blue; */
 }
 
 .overlap {
-  background-color: #90a955; /* or any other color you choose for overlaps */
+  background-color: #333333;
+  color: red;
 }
 
 .slider-container {

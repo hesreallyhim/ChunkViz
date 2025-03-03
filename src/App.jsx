@@ -54,7 +54,7 @@ const highlightChunks = (chunks) => {
     // Generate a pseudo-random color for each unique part using HSL
     const color = colorblindFriendlyColors[index % colorblindFriendlyColors.length];
 
-    const highlightedChunk = `<span style="background: ${color}; color: white>${uniquePart}</span>`;
+    const highlightedChunk = `<span class="foobar" style="background: ${color}">${uniquePart}</span>`;
     highlightedText += highlightedChunk;
 
     // Add overlap part only if it's not the last chunk
