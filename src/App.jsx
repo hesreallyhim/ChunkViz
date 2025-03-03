@@ -27,8 +27,16 @@ const colorblindFriendlyColors = [
   '#005FAD', // Deep Blue
 ];
 
+const ChunkSpan = ({ text, color }) => {
+  return <span style={{ background: color }}>{text}</span>;
+};
+
+const OverlapSpan = ({ text }) => {
+  return <span className="overlap">{text}</span>;
+};
+
 const highlightChunks = (chunks) => {
-  let highlightedText = '';
+  const chunkSpans = [];
 
   chunks.forEach((chunk, index) => {
     let uniquePart, overlapPart;
@@ -54,15 +62,16 @@ const highlightChunks = (chunks) => {
     // Generate a pseudo-random color for each unique part using HSL
     const color = colorblindFriendlyColors[index % colorblindFriendlyColors.length];
 
-    const highlightedChunk = `<span class="foobar" style="background: ${color}">${uniquePart}</span>`;
-    highlightedText += highlightedChunk;
+    const chunkSpan = <ChunkSpan key={index} text={uniquePart} color={color} />;
+    chunkSpans.push(chunkSpan);
 
     // Add overlap part only if it's not the last chunk
     if (overlapPart) {
-      highlightedText += `<span class="overlap">${overlapPart}</span>`;
+      const overlapSpan = <OverlapSpan key={index} text={overlapPart} />;
+      chunkSpans.push(overlapSpan);
     }
   });
-  return highlightedText;
+  return chunkSpans;
 };
 
 // Moved splitterOptions outside of the App component
@@ -103,7 +112,7 @@ function App() {
   const [text, setText] = useState(defaultProse);
   const [chunkSize, setChunkSize] = useState(25);
   const [overlap, setOverlap] = useState(0);
-  const [highlightedText, setHighlightedText] = useState('');
+  const [chunkSpanElements, setChunkSpanElements] = useState([]);
   const [splitter, setSplitter] = useState('characterSplitter');
   const [rawChunks, setRawChunks] = useState([]);
   const [overlapSize, setOverlapSize] = useState([]);
@@ -243,14 +252,14 @@ function App() {
     }
     setRawChunks(rawChunks); // Set the state variable
     const reconstructedChunks = reconstructChunks(rawChunks, overlap);
-    const highlightedText = highlightChunks(reconstructedChunks);
-    return highlightedText;
+    const chunkSpans = highlightChunks(reconstructedChunks);
+    return chunkSpans;
   }, [text, chunkSize, overlap, splitter]);
 
   useEffect(() => {
     (async () => {
-      const result = await renderTextWithHighlights();
-      setHighlightedText(result);
+      const chunkSpanElements = await renderTextWithHighlights();
+      setChunkSpanElements(chunkSpanElements);
     })();
   }, [renderTextWithHighlights]);
 
@@ -365,7 +374,9 @@ function App() {
         </div>
       </div>
       <div className="chunked-text">
-        <div dangerouslySetInnerHTML={{ __html: highlightedText }} />
+        {chunkSpanElements.map((element) => (
+          <>{element}</>
+        ))}
       </div>
       <hr style={{ width: '75%', marginTop: '15px' }} />
       <div id="info_box">
